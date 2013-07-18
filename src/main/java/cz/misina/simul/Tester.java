@@ -27,17 +27,17 @@ public class Tester {
         Random random = new Random(System.currentTimeMillis());
 
         while (actual.isBefore(finish)) {
-            if (random.nextInt(200) == 0) {
+            if (random.nextInt(400) == 0) {
                 actualTasks.add(new Task(++counter, actual, random.nextInt(4) + 5));
             }
             if (worker.getStatus() == WorkerStatus.FREE && actualTasks.size() > 0) {
                 t = actualTasks.get(0);
                 int shift = 0;
                 int i = 0;
-//                do {
-//                    i = actualTasks.size() - 1 - shift++;
-//                    t = actualTasks.get(i);
-//                } while (t.getTaskStatus() != TaskStatus.WAITING && shift < actualTasks.size());
+                do {
+                    i = actualTasks.size() - 1 - shift++;
+                    t = actualTasks.get(i);
+                } while (t.getTaskStatus() != TaskStatus.WAITING && shift < actualTasks.size());
                 taskPosition = i;
                 System.out.println("work start at " + actual + " with " + t.getId() + " for " + t.getDuration() + "" +
                         " minutes. Task created at " + t.getCreated());
