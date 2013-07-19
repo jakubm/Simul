@@ -31,15 +31,15 @@ public class Tester {
                 actualTasks.add(new Task(++counter, actual, random.nextInt(4) + 5));
             }
             if (worker.getStatus() == WorkerStatus.FREE && actualTasks.size() > 0) {
-                t = actualTasks.get(0);
                 int shift = 0;
                 int i = 0;
+                t = actualTasks.get(i);
                 do {
                     i = actualTasks.size() - 1 - shift++;
                     t = actualTasks.get(i);
                 } while (t.getTaskStatus() != TaskStatus.WAITING && shift < actualTasks.size());
                 taskPosition = i;
-                System.out.println("work start at " + actual + " with " + t.getId() + " for " + t.getDuration() + "" +
+                System.out.println("work start at " + actual + " id =  " + t.getId() + " for " + t.getDuration() + "" +
                         " minutes. Task created at " + t.getCreated());
                 if (worker.getLastChange() != null) {
                     System.out.println("Worker waiting time between tasks (mins) = " +
