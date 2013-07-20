@@ -31,15 +31,15 @@ public class Tester {
         Random random = new Random(System.currentTimeMillis());
 
         while (actual.isBefore(finish)) {
-            if (random.nextInt(500) == 0) {
-                int duration = random.nextInt(10) + 5;
+            if (random.nextInt(400) == 0 && actual.plusHours(1).isBefore(finish)) {
+                int duration = random.nextInt(6) + 6;
                 actualTasks.add(new Task(++counter, actual, duration));
                 actualTasks2.add(new Task(++counter2, actual, duration));
             }
             if (worker.getStatus() == WorkerStatus.FREE && actualTasks.size() > 0) {
                 t = actualTasks.get(0);
-                System.out.println(worker.getName() + " work start at " + actual + " id = " + t.getId() + " for " + t.getDuration() + "" +
-                        " minutes. Task created at " + t.getCreated());
+                System.out.println(actual + ": " + worker.getName() + " work start id = " + t.getId() + " for " +
+                        t.getDuration() + "" + " minutes. Task created at " + t.getCreated());
                 if (worker.getLastChange() != null) {
                     System.out.println(worker.getName() + "  waiting time between tasks (mins) = " +
                             -Minutes.minutesBetween(actual, worker.getLastChange()).getMinutes());
@@ -54,7 +54,7 @@ public class Tester {
                     worker.finishWork(actual);
                     t.setWorkFinish(actual);
                     actualTasks.remove(0);
-                    System.out.println(worker.getName() + " work finished at " + actual + " id = " + t.getId() + "\n");
+                    System.out.println(actual + ": " + worker.getName() + " work finished id = " + t.getId() + "\n");
 
                 }
             }
@@ -68,8 +68,8 @@ public class Tester {
                     t2 = actualTasks2.get(i);
                 } while (t2.getTaskStatus() != TaskStatus.WAITING && shift < actualTasks2.size());
                 taskPosition2 = i;
-                System.out.println(worker2.getName() + " work start at " + actual + " id = " + t2.getId() + " for " + t2.getDuration() + "" +
-                        " minutes. Task created at " + t2.getCreated());
+                System.out.println(actual + ": " + worker2.getName() + " work start id = " + t2.getId() + " for " +
+                        t2.getDuration() + "" + " minutes. Task created at " + t2.getCreated());
                 if (worker2.getLastChange() != null) {
                     System.out.println(worker2.getName() + " waiting time between tasks (mins) = " +
                             -Minutes.minutesBetween(actual, worker2.getLastChange()).getMinutes());
@@ -84,7 +84,7 @@ public class Tester {
                     worker2.finishWork(actual);
                     t2.setWorkFinish(actual);
                     actualTasks2.remove(taskPosition2);
-                    System.out.println(worker2.getName() + " work finished at " + actual + " id = " + t2.getId() + "\n");
+                    System.out.println(actual + ": " + worker2.getName() + " work finished id = " + t2.getId() + "\n");
 
                 }
             }
@@ -93,11 +93,13 @@ public class Tester {
         }
         System.out.println("Remaining tasks worker1");
         for (Task tt: actualTasks) {
-            System.out.println(tt.getId() + " created at " + tt.getCreated());
+            System.out.println(tt.getId() + " created at " + tt.getCreated() + " waited for " +
+                    Minutes.minutesBetween(tt.getCreated(), actual).getMinutes() + " minutes.");
         }
         System.out.println("Remaining tasks worker2");
         for (Task tt: actualTasks2) {
-            System.out.println(tt.getId() + " created at " + tt.getCreated());
+            System.out.println(tt.getId() + " created at " + tt.getCreated() + " waited for " +
+                    Minutes.minutesBetween(tt.getCreated(), actual).getMinutes() + " minutes.");
         }
     }
 }
