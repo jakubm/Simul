@@ -19,30 +19,28 @@ public class Tester {
         LocalDateTime actual = start;
         LocalDateTime finish = LocalDateTime.now();
         List<Task> actualTasks = new ArrayList<>();
+        List<Task> actualTasks2 = new ArrayList<>();
         Worker worker = new Worker("Worker 1");
+        Worker worker2 = new Worker("Worker 2");
         int counter = 0;
         Task t = null;
-        int taskPosition = -1;
+        Task t2 = null;
+        int taskPosition2 = -1;
 
         Random random = new Random(System.currentTimeMillis());
 
         while (actual.isBefore(finish)) {
             if (random.nextInt(400) == 0) {
-                actualTasks.add(new Task(++counter, actual, random.nextInt(4) + 5));
+                int duration = random.nextInt(4) + 5;
+                actualTasks.add(new Task(++counter, actual, duration));
+                actualTasks2.add(new Task(++counter, actual, duration));
             }
             if (worker.getStatus() == WorkerStatus.FREE && actualTasks.size() > 0) {
-                int shift = 0;
-                int i = 0;
-                t = actualTasks.get(i);
-                do {
-                    i = actualTasks.size() - 1 - shift++;
-                    t = actualTasks.get(i);
-                } while (t.getTaskStatus() != TaskStatus.WAITING && shift < actualTasks.size());
-                taskPosition = i;
-                System.out.println("work start at " + actual + " id =  " + t.getId() + " for " + t.getDuration() + "" +
+                t = actualTasks.get(0);
+                System.out.println(worker.getName() + " work start at " + actual + " id = " + t.getId() + " for " + t.getDuration() + "" +
                         " minutes. Task created at " + t.getCreated());
                 if (worker.getLastChange() != null) {
-                    System.out.println("Worker waiting time between tasks (mins) = " +
+                    System.out.println(worker.getName() + "  waiting time between tasks (mins) = " +
                             -Minutes.minutesBetween(actual, worker.getLastChange()).getMinutes());
                 }
                 System.out.println("Task waiting time (mins) = " +
@@ -51,19 +49,53 @@ public class Tester {
                 worker.startWork(t.getId(), actual);
             }
             if (worker.getStatus() == WorkerStatus.WORKING) {
-               if (t.getWorkStart().plusMinutes(t.getDuration()).isBefore(actual)) {
-                   worker.finishWork(actual);
-                   t.setWorkFinish(actual);
-                   actualTasks.remove(taskPosition);
-                   System.out.println("work finished at " + actual + " with " + t.getId());
+                if (t.getWorkStart().plusMinutes(t.getDuration()).isBefore(actual)) {
+                    worker.finishWork(actual);
+                    t.setWorkFinish(actual);
+                    actualTasks.remove(0);
+                    System.out.println(worker.getName() + " work finished at " + actual + " id = " + t.getId() + "\n");
 
-               }
+                }
+            }
+
+            if (worker2.getStatus() == WorkerStatus.FREE && actualTasks2.size() > 0) {
+                int shift = 0;
+                int i = 0;
+                t2 = actualTasks2.get(i);
+                do {
+                    i = actualTasks2.size() - 1 - shift++;
+                    t2 = actualTasks2.get(i);
+                } while (t2.getTaskStatus() != TaskStatus.WAITING && shift < actualTasks2.size());
+                taskPosition2 = i;
+                System.out.println(worker2.getName() + " work start at " + actual + " id = " + t2.getId() + " for " + t2.getDuration() + "" +
+                        " minutes. Task created at " + t2.getCreated());
+                if (worker2.getLastChange() != null) {
+                    System.out.println(worker2.getName() + " waiting time between tasks (mins) = " +
+                            -Minutes.minutesBetween(actual, worker2.getLastChange()).getMinutes());
+                }
+                System.out.println("Task waiting time (mins) = " +
+                        -Minutes.minutesBetween(actual, t2.getCreated()).getMinutes());
+                t2.setWorkStart(actual);
+                worker2.startWork(t2.getId(), actual);
+            }
+            if (worker2.getStatus() == WorkerStatus.WORKING) {
+                if (t2.getWorkStart().plusMinutes(t2.getDuration()).isBefore(actual)) {
+                    worker2.finishWork(actual);
+                    t2.setWorkFinish(actual);
+                    actualTasks2.remove(taskPosition2);
+                    System.out.println(worker2.getName() + " work finished at " + actual + " id = " + t2.getId() + "\n");
+
+                }
             }
 
             actual = actual.plusSeconds(1);
         }
-        System.out.println("Remaining tasks");
+        System.out.println("Remaining tasks worker1");
         for (Task tt: actualTasks) {
+            System.out.println(tt.getId() + " created at " + tt.getCreated());
+        }
+        System.out.println("Remaining tasks worker2");
+        for (Task tt: actualTasks2) {
             System.out.println(tt.getId() + " created at " + tt.getCreated());
         }
     }
