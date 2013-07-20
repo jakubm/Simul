@@ -91,13 +91,13 @@ public class Tester {
 
             actual = actual.plusSeconds(1);
         }
-        System.out.println("Remaining tasks worker1");
+        printRemainingTasks(worker.getName(), actual, actualTasks);
+        printRemainingTasks(worker2.getName(), actual, actualTasks2);
+    }
+
+    private static void printRemainingTasks(String name, LocalDateTime actual, List<Task> actualTasks) {
+        System.out.println("Remaining tasks for " + name);
         for (Task tt: actualTasks) {
-            System.out.println(tt.getId() + " created at " + tt.getCreated() + " waited for " +
-                    Minutes.minutesBetween(tt.getCreated(), actual).getMinutes() + " minutes.");
-        }
-        System.out.println("Remaining tasks worker2");
-        for (Task tt: actualTasks2) {
             System.out.println(tt.getId() + " created at " + tt.getCreated() + " waited for " +
                     Minutes.minutesBetween(tt.getCreated(), actual).getMinutes() + " minutes.");
         }
