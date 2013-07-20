@@ -23,6 +23,7 @@ public class Tester {
         Worker worker = new Worker("Worker 1");
         Worker worker2 = new Worker("Worker 2");
         int counter = 0;
+        int counter2 = 0;
         Task t = null;
         Task t2 = null;
         int taskPosition2 = -1;
@@ -30,10 +31,10 @@ public class Tester {
         Random random = new Random(System.currentTimeMillis());
 
         while (actual.isBefore(finish)) {
-            if (random.nextInt(400) == 0) {
-                int duration = random.nextInt(4) + 5;
+            if (random.nextInt(500) == 0) {
+                int duration = random.nextInt(10) + 5;
                 actualTasks.add(new Task(++counter, actual, duration));
-                actualTasks2.add(new Task(++counter, actual, duration));
+                actualTasks2.add(new Task(++counter2, actual, duration));
             }
             if (worker.getStatus() == WorkerStatus.FREE && actualTasks.size() > 0) {
                 t = actualTasks.get(0);
