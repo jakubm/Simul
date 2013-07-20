@@ -1,4 +1,4 @@
-package cz.misina.simul;
+    package cz.misina.simul;
 
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
@@ -32,7 +32,7 @@ public class Tester {
 
         while (actual.isBefore(finish)) {
             if (random.nextInt(400) == 0 && actual.plusHours(1).isBefore(finish)) {
-                int duration = random.nextInt(6) + 6;
+                int duration = random.nextInt(6) + 5;
                 actualTasks.add(new Task(++counter, actual, duration));
                 actualTasks2.add(new Task(++counter2, actual, duration));
             }
@@ -54,7 +54,7 @@ public class Tester {
                     worker.finishWork(actual);
                     t.setWorkFinish(actual);
                     actualTasks.remove(0);
-                    System.out.println(actual + ": " + worker.getName() + " work finished id = " + t.getId() + "\n");
+                    System.out.println("\n" + actual + ": " + worker.getName() + " work finished id = " + t.getId() + "\n");
 
                 }
             }
@@ -84,7 +84,7 @@ public class Tester {
                     worker2.finishWork(actual);
                     t2.setWorkFinish(actual);
                     actualTasks2.remove(taskPosition2);
-                    System.out.println(actual + ": " + worker2.getName() + " work finished id = " + t2.getId() + "\n");
+                    System.out.println("\n" + actual + ": " + worker2.getName() + " work finished id = " + t2.getId() + "\n");
 
                 }
             }
