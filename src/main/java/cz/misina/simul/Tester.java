@@ -32,7 +32,7 @@ public class Tester {
 
         while (actual.isBefore(finish)) {
             if (random.nextInt(400) == 0 && actual.plusHours(1).isBefore(finish)) {
-                int duration = random.nextInt(6) + 5;
+                int duration = random.nextInt(7) + 4;
                 actualTasks.add(new Task(++counter, actual, duration));
                 actualTasks2.add(new Task(++counter2, actual, duration));
             }
